@@ -12,9 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.json.*;
-
 
 /**
  *
@@ -25,7 +26,7 @@ public class GestisciMetodi {
     private String urlBase = "https://api.telegram.org/bot5232168151:AAFh9DG1YcHKKmvHE9_kigEyjdoy7tKZwq4/";
     private JSONArray VetMessaggi;
 
-    public void myGetUpdate() throws MalformedURLException, IOException {
+    public boolean myGetUpdate() throws MalformedURLException, IOException {
 
         String urlParziale = urlBase + "getUpdates";
         //trascrivo la risposta su un file
@@ -36,10 +37,43 @@ public class GestisciMetodi {
         JSONObject obj = new JSONObject(Response);
 
         if (obj.getString("ok").equals("true")) {
-           VetMessaggi = obj.getJSONArray("messaggi");
-            
+            VetMessaggi = obj.getJSONArray("result");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean mySendMessageAll(String msg) throws MalformedURLException, IOException {
+        List<String> ListaID = myFindAllId();
+        String urlParziale = urlBase + "sendMessage";
+
+        for (int i = 0; i < ListaID.size(); i++) {
+                urlParziale = "?chat_id="+ListaID.get(i)+"&text="+msg;
+            URL url = new URL(urlParziale);
+            Scanner sc = new Scanner(url.openStream());
+            sc.useDelimiter("\u001a");
+        }
+        return false;
+    }
+
+    //trovo tutti gli ID delle chat che hanno scritto al bot
+    public List<String> myFindAllId() {
+
+        JSONObject appoggio;
+        JSONObject chat;
+        List<String> ListaID = new ArrayList<String>();
+
+        for (int i = 0; i < VetMessaggi.length(); i++) {
+            appoggio = new JSONObject(VetMessaggi.get(i).toString());
+            chat = new JSONObject(appoggio.get("chat"));
+
+            if (!ListaID.contains(chat.getString("id"))) {
+                ListaID.add(chat.getString("id"));
+            }
+
         }
 
+        return ListaID;
     }
 
     private File ScriviSuFile(String urlParziale) throws MalformedURLException, IOException {
