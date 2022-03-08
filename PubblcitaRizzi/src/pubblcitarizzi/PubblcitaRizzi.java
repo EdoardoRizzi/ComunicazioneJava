@@ -5,6 +5,8 @@
  */
 package pubblcitarizzi;
 
+import java.io.IOException;
+import telegramAPI.GestisciMetodi;
 import telegramAPI.Test;
 
 /**
@@ -16,10 +18,10 @@ public class PubblcitaRizzi {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        Test t = new Test();
-        t.foo();
+        GestisciMetodi gm = new GestisciMetodi();
+        gm.myGetUpdate();
     }
     
 }
