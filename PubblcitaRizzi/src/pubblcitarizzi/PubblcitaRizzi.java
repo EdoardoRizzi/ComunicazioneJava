@@ -21,7 +21,12 @@ public class PubblcitaRizzi {
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         GestisciMetodi gm = new GestisciMetodi();
-        gm.myGetUpdate();
+        
+        if(gm.mySendMessageAll("secondo messaggio")){
+            System.out.println("messaggi inviati correttamente");
+        } else {
+            System.out.println("errore nel invio del messaggio");
+        }
     }
     
 }

@@ -35,46 +35,45 @@ public class GestisciMetodi {
         String Response = LeggiDaFile(DaLeggere);
         //parso la stringa
         JSONObject obj = new JSONObject(Response);
-
+        //VetMesssaggi contiene tutti i messaggi inviati al bot
         VetMessaggi = obj.getJSONArray("result");
-        mySendMessageAll("funziona");
-        
     }
-    
-    //trovo tutti gli ID delle chat che hanno scritto al bot
-    public List<String> myFindAllId() {
-        JSONObject appoggio;
-        JSONObject messaggio;
-        JSONObject chat;
-        String ID;
-        List<String> ListaID = new ArrayList<String>();
 
-        for (int i = 0; i < VetMessaggi.length(); i++) {
-            appoggio = new JSONObject(VetMessaggi.get(i).toString());
-            messaggio = appoggio.getJSONObject("message");
-            chat = messaggio.getJSONObject("chat");
-            ID = Integer.toString(chat.getInt("id"));
-            
-            if (!ListaID.contains(ID.toString())){
-                ListaID.add(ID);
-            }
-
-        }
-
-        return ListaID;
-    }
-    
     public boolean mySendMessageAll(String msg) throws MalformedURLException, IOException {
         List<String> ListaID = myFindAllId();
         String urlParziale = urlBase + "sendMessage";
+        boolean Sent = false;
 
         for (int i = 0; i < ListaID.size(); i++) {
+            //costruisco i vari URL
             urlParziale += "?chat_id=" + ListaID.get(i) + "&text=" + msg;
             URL url = new URL(urlParziale);
             Scanner sc = new Scanner(url.openStream());
             sc.useDelimiter("\u001a");
+            Sent = true;
         }
-        return false;
+        return Sent;
+    }
+
+    //trovo tutti gli ID delle chat che hanno scritto al bot
+    public List<String> myFindAllId() throws IOException {
+        //sono sicuro che VetMessaggi si inizializzato
+        myGetUpdate();
+        //lista con tutti gli ID delle chat che hanno scritto al bot
+        List<String> ListaID = new ArrayList<String>();
+
+        for (int i = 0; i < VetMessaggi.length(); i++) {
+            JSONObject appoggio = new JSONObject(VetMessaggi.get(i).toString());
+            JSONObject messaggio = appoggio.getJSONObject("message");
+            JSONObject chat = messaggio.getJSONObject("chat");
+            String ID = Integer.toString(chat.getInt("id"));
+            
+            //controllo che l'id non sia già stato inserito, se manca lo aggiungo alla lista
+            if (!ListaID.contains(ID.toString())) {
+                ListaID.add(ID);
+            }
+        }
+        return ListaID;
     }
 
     private File ScriviSuFile(String urlParziale) throws MalformedURLException, IOException {
