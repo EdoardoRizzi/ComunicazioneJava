@@ -22,8 +22,8 @@ public class PubblcitaRizzi {
         // TODO code application logic here
         GestisciMetodi gm = new GestisciMetodi();
         
-        if(gm.mySendMessageAll("secondo messaggio")){
-            System.out.println("messaggi inviati correttamente");
+        if(gm.mySendMessageAll("messaggio con encode")){
+            System.out.println("messaggio inviato correttamente");
         } else {
             System.out.println("errore nel invio del messaggio");
         }

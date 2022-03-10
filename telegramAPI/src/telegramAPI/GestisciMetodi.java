@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -46,7 +48,8 @@ public class GestisciMetodi {
 
         for (int i = 0; i < ListaID.size(); i++) {
             //costruisco i vari URL
-            urlParziale += "?chat_id=" + ListaID.get(i) + "&text=" + msg;
+            urlParziale += "?chat_id=" + ListaID.get(i) + "&text=" + URLEncoder.encode(msg, StandardCharsets.UTF_8);
+            System.out.println(urlParziale);
             URL url = new URL(urlParziale);
             Scanner sc = new Scanner(url.openStream());
             sc.useDelimiter("\u001a");
