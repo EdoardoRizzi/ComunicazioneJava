@@ -6,8 +6,10 @@
 package pubblcitarizzi;
 
 import java.io.IOException;
-import telegramAPI.GestisciMetodi;
-import telegramAPI.Test;
+import java.net.MalformedURLException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import telegramAPI.*;
 
 /**
  *
@@ -18,7 +20,7 @@ public class PubblcitaRizzi {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, MalformedURLException, ParserConfigurationException, SAXException {
         // TODO code application logic here
         GestisciMetodi gm = new GestisciMetodi();
         
@@ -27,6 +29,8 @@ public class PubblcitaRizzi {
         } else {
             System.out.println("errore nel invio del messaggio");
         }
+        
+        gm.myGetLocation("prova");
     }
     
 }
