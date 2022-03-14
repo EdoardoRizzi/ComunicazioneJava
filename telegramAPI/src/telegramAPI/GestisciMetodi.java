@@ -79,6 +79,9 @@ public class GestisciMetodi {
         return ListaID;
     }
 
+    
+            
+            
     private File ScriviSuFile(String urlParziale) throws MalformedURLException, IOException {
         URL url = new URL(urlParziale);
         Scanner sc = new Scanner(url.openStream());
