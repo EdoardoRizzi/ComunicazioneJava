@@ -24,13 +24,13 @@ public class PubblcitaRizzi {
         // TODO code application logic here
         GestisciMetodi gm = new GestisciMetodi();
         
-        if(gm.mySendMessageAll("messaggio con encode")){
+        if(gm.mySendMessageAll("funziona?")){
             System.out.println("messaggio inviato correttamente");
         } else {
             System.out.println("errore nel invio del messaggio");
         }
         
-        gm.myGetLocation("prova");
+        gm.myGetLocation("Via Mazzini 12", "571591485", "34121");
     }
     
 }
