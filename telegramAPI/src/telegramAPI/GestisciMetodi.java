@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
  */
 public class GestisciMetodi {
 
-    private String urlBase = "https://api.telegram.org/bot5232168151:AAFh9DG1YcHKKmvHE9_kigEyjdoy7tKZwq4/";
+    private String urlBase = "https://api.telegram.org/key/";
     private JSONArray VetMessaggi;
     private List<Persona> VetPersone = new ArrayList<Persona>();
 
