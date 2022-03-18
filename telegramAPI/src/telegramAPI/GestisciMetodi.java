@@ -34,8 +34,10 @@ import org.xml.sax.SAXException;
  */
 public class GestisciMetodi {
 
-    private String urlBase = "https://api.telegram.org/key/";
+    private String urlBase = "https://api.telegram.org/mettilakeyS/";
+    //vettore con tutti i messaggi inviati prelevati tramite GetUpdate
     private JSONArray VetMessaggi;
+    //lista delle "Persone" che hanno scritto al bot
     private List<Persona> VetPersone = new ArrayList<Persona>();
 
     public void myGetUpdate() throws MalformedURLException, IOException {
@@ -72,24 +74,25 @@ public class GestisciMetodi {
     public void myFindAllId() throws IOException {
         //sono sicuro che VetMessaggi si inizializzato
         myGetUpdate();
-        //lista con tutti gli ID delle chat che hanno scritto al bot
 
+        //lista con tutti gli ID delle chat che hanno scritto al bot
         for (int i = 0; i < VetMessaggi.length(); i++) {
+            //creo una variabilie di appoggio prelevando l'oggetto in posizione I presente in VetMessaggi
             JSONObject appoggio = new JSONObject(VetMessaggi.get(i).toString());
             JSONObject messaggio = appoggio.getJSONObject("message");
             JSONObject chat = messaggio.getJSONObject("chat");
-            String ID = Integer.toString(chat.getInt("id"));
+            String id_Chat = Integer.toString(chat.getInt("id"));
             String Nome = chat.getString("first_name");
-            //controllo che l'id non sia già stato inserito, se manca lo aggiungo alla lista
-            if (!VetPersone.contains(ID.toString())) {
-                VetPersone.add(new Persona(ID, Nome, 0.0f, 0.0f));
-            }
+            int id_Message = chat.getInt("message_id");
+
+            VetPersone.add(new Persona(id_Chat, Nome, id_Message, 0.0f, 0.0f));
+
         }
 
         VetPersonetoCSV();
     }
 
-    public void myGetLocation(String Indirizzo, String Id, String CAP) throws ParserConfigurationException, SAXException, IOException {
+    public void myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
         //genero l'URL e scrivo il risultato su file
         String urlParziale = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(Indirizzo, StandardCharsets.UTF_8) + "&format=xml&addressdetails=1";
         File RispostaSito = ScriviSuFile(urlParziale, "RispostaSito.txt");
@@ -112,40 +115,73 @@ public class GestisciMetodi {
 
         //ciclo la lista per trovare la persona con lo stesso ID passato
         myFindAllId();
+
         int i = 0;
         boolean trovato = false, capTrovato = false;
         while (!trovato && i < VetPersone.size()) {
-            if (VetPersone.get(i).getIdChat().equals(Id)) {
-                for (int j = 0; j < nodelist.getLength(); j++) {
-                    node = (Element) nodelist.item(j);
-                    String strcap = trovaCAP(node.getAttribute("display_name"));
-                    if (CAP.equals(strcap)){
-                        VetPersone.get(i).setLat(Float.parseFloat(node.getAttribute("lat")));
-                        VetPersone.get(i).setLon(Float.parseFloat(node.getAttribute("lon")));
-                        capTrovato = true;
-                    }
-                }
-                trovato = true;
+            for (int j = 0; j < nodelist.getLength(); j++) {
+                node = (Element) nodelist.item(j);
+                VetPersone.get(i).setLat(Float.parseFloat(node.getAttribute("lat")));
+                VetPersone.get(i).setLon(Float.parseFloat(node.getAttribute("lon")));
             }
+            trovato = true;
         }
-        if (capTrovato) {
-            VetPersonetoCSV();
-            System.out.println("Poszione trovata, CSV aggiornato");
-        } else {
-            System.out.println("Posizione non trovata");
-        }
-        
+
+        VetPersonetoCSV();
+
     }
 
-    private String trovaCAP(String displayname) {
-        String strCAP = "";
-        if(displayname != null) {
-            String[] elementi = displayname.split(",");
-            strCAP = elementi[elementi.length - 2];
-            strCAP = strCAP.substring(1);
-            int i = Integer.parseInt(strCAP);
+    public void VetPersonetoCSV() {
+        try {
+
+            FileWriter fw = new FileWriter("Persone.csv");
+
+            for (int i = 0; i < VetPersone.size(); i++) {
+                String p = VetPersone.get(i).toCSV() + "\r\n";
+                fw.write(p);
+            }
+
+            fw.flush();
+            fw.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(GestisciMetodi.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
-        return strCAP;
+    }
+
+    public void CaricaVetPersonaFromCSV() {
+        try {
+
+            VetPersone.clear();
+
+            FileReader fr = new FileReader("Persone.csv");
+            BufferedReader br = new BufferedReader(fr);
+
+            String riga;
+            while ((riga = br.readLine()) != null) {
+                String[] elementi = riga.split(";");
+
+                String id = elementi[0];
+                String nome = elementi[1];
+                Float lat = Float.parseFloat(elementi[2]);
+                Float lon = Float.parseFloat(elementi[3]);
+
+                Persona p = new Persona(id, nome, lat, lon);
+                VetPersone.add(p);
+            }
+
+            br.close();
+            fr.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GestisciMetodi.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(GestisciMetodi.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private File ScriviSuFile(String urlParziale, String NomeFile) throws MalformedURLException, IOException {
@@ -177,52 +213,20 @@ public class GestisciMetodi {
         return jsString;
     }
 
-    private void VetPersonetoCSV() {
-        try {
+    private int CheckMessageID(int LastID) {
+        int NewLastID = 0, i = 0;
+        boolean trovato = false;
+        
+        while (i < VetMessaggi.length() && !trovato) {
 
-            FileWriter fw = new FileWriter("Persone.csv");
-
-            for (int i = 0; i < VetPersone.size(); i++) {
-                String p = VetPersone.get(i).toCSV() + "\r\n";
-                fw.write(p);
-            }
-
-            fw.flush();
-            fw.close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(GestisciMetodi.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        return NewLastID;
     }
 
-    private void CaricaVetPersonaFromCSV() {
-        try {
-
-            VetPersone.clear();
-
-            FileReader fr = new FileReader("Persone.csv");
-            BufferedReader br = new BufferedReader(fr);
-
-            String riga;
-            while ((riga = br.readLine()) != null) {
-                String[] elementi = riga.split(";");
-
-                String id = elementi[0];
-                String nome = elementi[1];
-                Float lat = Float.parseFloat(elementi[2]);
-                Float lon = Float.parseFloat(elementi[3]);
-
-                Persona p = new Persona(id, nome, lat, lon);
-                VetPersone.add(p);
-            }
-
-            br.close();
-            fr.close();
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GestisciMetodi.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GestisciMetodi.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private int getID( JSONObject obj) {
+        JSONObject messaggio = obj.getJSONObject("message");
+        int id_Message = messaggio.getInt("message_id");
+        return id_Message;
     }
 }

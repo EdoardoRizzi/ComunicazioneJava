@@ -23,14 +23,15 @@ public class PubblcitaRizzi {
     public static void main(String[] args) throws IOException, MalformedURLException, ParserConfigurationException, SAXException {
         // TODO code application logic here
         GestisciMetodi gm = new GestisciMetodi();
+        gm.myGetUpdate();
         
-        if(gm.mySendMessageAll("funziona?")){
+        /*if(gm.mySendMessageAll("funziona?")){
             System.out.println("messaggio inviato correttamente");
         } else {
             System.out.println("errore nel invio del messaggio");
         }
         
-        gm.myGetLocation("Via Mazzini 12", "571591485", "34121");
+        gm.myGetLocation("Via Mazzini 12");*/
     }
     
 }

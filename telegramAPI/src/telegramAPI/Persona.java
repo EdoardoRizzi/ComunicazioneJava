@@ -10,6 +10,7 @@ package telegramAPI;
  */
 public class Persona {
     private String IdChat, First_Name, Indirizzo;
+    private int IdMessage;
     private Float lat, lon; 
 
     public Persona() {
@@ -21,10 +22,18 @@ public class Persona {
         this.lat = p.getLat();
         this.lon = p.getLon();
     }
-
+    
     public Persona(String IdChat, String First_Name, Float lat, Float lon) {
         this.IdChat = IdChat;
         this.First_Name = First_Name;
+        this.lat = lat;
+        this.lon = lon;
+    }
+
+    public Persona(String IdChat, String First_Name, int IdMessage,Float lat, Float lon) {
+        this.IdChat = IdChat;
+        this.First_Name = First_Name;
+        this.IdMessage = IdMessage;
         this.lat = lat;
         this.lon = lon;
     }
