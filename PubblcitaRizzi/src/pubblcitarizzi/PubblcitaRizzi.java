@@ -22,8 +22,8 @@ public class PubblcitaRizzi {
      */
     public static void main(String[] args) throws IOException, MalformedURLException, ParserConfigurationException, SAXException {
         // TODO code application logic here
-        GestisciMetodi gm = new GestisciMetodi();
-        gm.myGetUpdate();
+        
+        
         
         /*if(gm.mySendMessageAll("funziona?")){
             System.out.println("messaggio inviato correttamente");
