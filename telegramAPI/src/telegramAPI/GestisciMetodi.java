@@ -90,6 +90,19 @@ public class GestisciMetodi {
         return Sent;
     }
 
+    public void mySendMessage(String msg, String idChat) throws MalformedURLException, IOException {
+        String urlParziale = urlBase + "sendMessage";
+        boolean Sent = false;
+
+        //costruisco i vari URL
+        urlParziale += "?chat_id=" + idChat + "&text=" + URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        URL url = new URL(urlParziale);
+        Scanner sc = new Scanner(url.openStream());
+        sc.useDelimiter("\u001a");
+        Sent = true;
+
+    }
+
     //trovo tuttii quelli che hanno scritto al bot
     public void myFindAll() throws ParserConfigurationException, SAXException, IOException {
         for (int i = 0; i < VetMessaggi.length(); i++) {
@@ -116,7 +129,7 @@ public class GestisciMetodi {
     }
 
     //dato l'indirizzo ricava le coordinate
-    private float[] myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
+    public float[] myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
         float[] Coordinate = {0, 0};
         //genero l'URL e scrivo il risultato su file
         String urlParziale = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(Indirizzo, StandardCharsets.UTF_8) + "&format=xml&addressdetails=1";
