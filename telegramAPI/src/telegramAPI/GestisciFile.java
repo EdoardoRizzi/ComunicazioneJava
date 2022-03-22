@@ -57,8 +57,8 @@ public class GestisciFile {
             while ((riga = br.readLine()) != null) {
                 String[] elementi = riga.split(";");
 
-                String id = elementi[0];
-                String nome = elementi[1];
+                String nome = elementi[0];
+                String id = elementi[1];
                 Float lat = Float.parseFloat(elementi[2]);
                 Float lon = Float.parseFloat(elementi[3]);
 

@@ -43,7 +43,7 @@ public class GestisciMetodi {
     private GestisciFile gf;
 
     public GestisciMetodi() {
-        urlBase = "https://api.telegram.org/mettilakeyS/";
+        urlBase = "https://api.telegram.org/botRICORDATILACHIAVE/";
         VetPersone = new ArrayList<Persona>();
         gf = new GestisciFile();
     }
@@ -68,7 +68,7 @@ public class GestisciMetodi {
             JSONObject appoggio = new JSONObject(VetMessaggi.get(i).toString());
             JSONObject messaggio = appoggio.getJSONObject("message");
 
-            if (!messaggio.getString("Text").contains("/citta")) {
+            if (!messaggio.getString("text").contains("/citta")) {
                 VetMessaggi.remove(i);
             }
         }
@@ -109,7 +109,7 @@ public class GestisciMetodi {
             //creo una variabilie di appoggio prelevando l'oggetto in posizione I presente in VetMessaggi
             JSONObject appoggio = new JSONObject(VetMessaggi.get(i).toString());
             JSONObject messaggio = appoggio.getJSONObject("message");
-            String Indirizzo = messaggio.getString("Text");
+            String Indirizzo = messaggio.getString("text");
 
             //tolgo "/citta " per avere l'inidirizzo 'pulito' (7 perché conto anche uno spazio)
             Indirizzo.substring(7);
@@ -119,7 +119,7 @@ public class GestisciMetodi {
             JSONObject chat = messaggio.getJSONObject("chat");
             String id_Chat = Integer.toString(chat.getInt("id"));
             String Nome = chat.getString("first_name");
-            int id_Message = chat.getInt("message_id");
+            int id_Message = messaggio.getInt("message_id");
 
             VetPersone.add(new Persona(id_Chat, Nome, id_Message, Coordinate[0], Coordinate[1]));
         }

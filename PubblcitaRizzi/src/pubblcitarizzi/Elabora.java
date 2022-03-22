@@ -34,10 +34,10 @@ public class Elabora extends Thread {
             } catch (IOException ex) {
                 Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             //controllo se ci sono messaggi "/citta"
             gm.myMsgCitta();
-            
+
             try {
                 //prendo il 'contatto' di chi ha inserito la citta e li salvo su file
                 gm.myFindAll();
@@ -48,10 +48,12 @@ public class Elabora extends Thread {
             } catch (IOException ex) {
                 Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
-            
-            
+
+            try {
+                Thread.sleep(100000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
