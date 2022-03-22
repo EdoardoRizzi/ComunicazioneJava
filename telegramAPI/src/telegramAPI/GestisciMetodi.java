@@ -75,7 +75,7 @@ public class GestisciMetodi {
     }
 
     public boolean mySendMessageAll(String msg) throws MalformedURLException, IOException {
-        myFindAllId();
+        gf.CaricaVetPersonaFromCSV();
         String urlParziale = urlBase + "sendMessage";
         boolean Sent = false;
 
@@ -115,7 +115,8 @@ public class GestisciMetodi {
         gf.VetPersonetoCSV(VetPersone);
     }
 
-    public float[] myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
+    //dato l'indirizzo ricava le coordinate
+    private float[] myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
         float[] Coordinate = {0, 0};
         //genero l'URL e scrivo il risultato su file
         String urlParziale = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(Indirizzo, StandardCharsets.UTF_8) + "&format=xml&addressdetails=1";

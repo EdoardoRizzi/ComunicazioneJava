@@ -38,6 +38,18 @@ public class Elabora extends Thread {
             //controllo se ci sono messaggi "/citta"
             gm.myMsgCitta();
             
+            try {
+                //prendo il 'contatto' di chi ha inserito la citta e li salvo su file
+                gm.myFindAll();
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
             
             
         }
