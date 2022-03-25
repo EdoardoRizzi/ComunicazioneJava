@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import telegramAPI.GestisciMetodi;
+import telegramAPI.*;
 
 /**
  *
@@ -19,14 +19,17 @@ import telegramAPI.GestisciMetodi;
 public class Elabora extends Thread {
 
     private GestisciMetodi gm;
+    private GestisciFile gf;
     private int LastID;
 
     public Elabora() {
         gm = new GestisciMetodi();
+        gf = new GestisciFile();
     }
 
     @Override
     public void run() {
+        //gm.CaricaVetPersone(gf.CaricaVetPersonaFromCSV("Persone.csv"));
         while (true) {
             try {
                 //controllo se arrivano nuovi messaggi

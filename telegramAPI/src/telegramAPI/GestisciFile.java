@@ -46,11 +46,11 @@ public class GestisciFile {
         }
     }
 
-    public List<Persona> CaricaVetPersonaFromCSV() {
+    public List<Persona> CaricaVetPersonaFromCSV(String File) {
         List<Persona> VetPersone = new ArrayList<Persona>();
         
         try {
-            FileReader fr = new FileReader("Persone.csv");
+            FileReader fr = new FileReader(File);
             BufferedReader br = new BufferedReader(fr);
 
             String riga;
@@ -59,10 +59,9 @@ public class GestisciFile {
 
                 String nome = elementi[0];
                 String id = elementi[1];
-                Float lat = Float.parseFloat(elementi[2]);
-                Float lon = Float.parseFloat(elementi[3]);
+                Luogo l = new Luogo(Float.parseFloat(elementi[2]), Float.parseFloat(elementi[3]));
 
-                Persona p = new Persona(id, nome, lat, lon);
+                Persona p = new Persona(id, nome, l);
                 VetPersone.add(p);
             }
 

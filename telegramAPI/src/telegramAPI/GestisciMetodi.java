@@ -43,7 +43,7 @@ public class GestisciMetodi {
     private GestisciFile gf;
 
     public GestisciMetodi() {
-        urlBase = "https://api.telegram.org/botRICORDATILACHIAVE/";
+        urlBase = "https://api.telegram.org/bot5232168151:AAFh9DG1YcHKKmvHE9_kigEyjdoy7tKZwq4/";
         VetPersone = new ArrayList<Persona>();
         gf = new GestisciFile();
     }
@@ -74,21 +74,21 @@ public class GestisciMetodi {
         }
     }
 
-    public boolean mySendMessageAll(String msg) throws MalformedURLException, IOException {
-        gf.CaricaVetPersonaFromCSV();
+    /*public boolean mySendMessageAll(String msg) throws MalformedURLException, IOException {
+        gf.CaricaVetPersonaFromCSV("Persone.csv");
         String urlParziale = urlBase + "sendMessage";
         boolean Sent = false;
 
         for (int i = 0; i < VetPersone.size(); i++) {
             //costruisco i vari URL
-            urlParziale += "?chat_id=" + VetPersone.get(i).getIdChat() + "&text=" + URLEncoder.encode(msg, StandardCharsets.UTF_8);
+            urlParziale += VetPersone.get("?chat_id=" + i).getIdChat() + "&text=" + URLEncoder.encode(msg, StandardCharsets.UTF_8);
             URL url = new URL(urlParziale);
             Scanner sc = new Scanner(url.openStream());
             sc.useDelimiter("\u001a");
             Sent = true;
         }
         return Sent;
-    }
+    }*/
 
     public void mySendMessage(String msg, String idChat) throws MalformedURLException, IOException {
         String urlParziale = urlBase + "sendMessage";
@@ -114,14 +114,20 @@ public class GestisciMetodi {
             //tolgo "/citta " per avere l'inidirizzo 'pulito' (7 perché conto anche uno spazio)
             Indirizzo.substring(7);
             //trovo le coordinate relativo all'inidirizzo precendente
-            float[] Coordinate = myGetLocation(Indirizzo);
+            Luogo Coordinate = myGetLocation(Indirizzo);
             //ricavo gli altri dati necessari
             JSONObject chat = messaggio.getJSONObject("chat");
             String id_Chat = Integer.toString(chat.getInt("id"));
-            String Nome = chat.getString("first_name");
-            int id_Message = messaggio.getInt("message_id");
+            int PosPossibile = myEsistePersona(id_Chat);
+            
+            if (PosPossibile != -1) {
+                VetPersone.get(PosPossibile).setLuogo(Coordinate);
+            } else {
+                String Nome = chat.getString("first_name");
+                int id_Message = messaggio.getInt("message_id");
 
-            VetPersone.add(new Persona(id_Chat, Nome, id_Message, Coordinate[0], Coordinate[1]));
+                VetPersone.add(new Persona(id_Chat, Nome, id_Message, Coordinate));
+            }
         }
 
         //salvo tutti quelli che hanno scritto al bot su un file
@@ -129,8 +135,7 @@ public class GestisciMetodi {
     }
 
     //dato l'indirizzo ricava le coordinate
-    public float[] myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
-        float[] Coordinate = {0, 0};
+    public Luogo myGetLocation(String Indirizzo) throws ParserConfigurationException, SAXException, IOException {
         //genero l'URL e scrivo il risultato su file
         String urlParziale = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(Indirizzo, StandardCharsets.UTF_8) + "&format=xml&addressdetails=1";
         File RispostaSito = gf.ScriviSuFile(urlParziale, "RispostaSito.txt");
@@ -153,10 +158,20 @@ public class GestisciMetodi {
 
         //prendo il primo risultato che mi viene restituito
         node = (Element) nodelist.item(0);
-        Coordinate[0] = Float.parseFloat(node.getAttribute("lat"));
-        Coordinate[1] = Float.parseFloat(node.getAttribute("lon"));
+        
+        Luogo coordinate = new Luogo(Float.parseFloat(node.getAttribute("lat")), Float.parseFloat(node.getAttribute("lon")));
 
-        return Coordinate;
+        return coordinate;
+    }
+
+    public int myEsistePersona(String ID) {
+        int posPersona = -1;
+        for (int i = 0; i < VetPersone.size(); i++) {
+            if (VetPersone.get(i).getIdChat().equals(ID)) {
+                posPersona = i;
+            }
+        }
+        return posPersona;
     }
 
     public int CheckMessageID(int LastID) {
@@ -181,5 +196,9 @@ public class GestisciMetodi {
         JSONObject messaggio = obj.getJSONObject("message");
         int id_Message = messaggio.getInt("message_id");
         return id_Message;
+    }
+    
+    public void CaricaVetPersone(List<Persona> Vet){
+        VetPersone = Vet;
     }
 }
