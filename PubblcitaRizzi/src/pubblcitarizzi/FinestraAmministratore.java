@@ -132,11 +132,9 @@ public class FinestraAmministratore extends javax.swing.JFrame {
         double d;
         
         for (int i = 0; i < Contatti.size(); i++) {
-            double lat1 = Coordinate.getLat();
-            double lat2 = Contatti.get(i).getLat();
-            double lon1 = Coordinate.getLon();
-            double lon2 = Contatti.get(i).getLon();
-            d = Math.acos(Math.cos(Math.toRadians(90-lat1))*Math.cos(Math.toRadians(90-lat2))+Math.sin(Math.toRadians(90-lat1))*Math.sin(Math.toRadians(90-lat2))*Math.cos(Math.toRadians(lon1-lon2)))*6371*1000;
+            
+            d = Coordinate.CalcolaDistanza(Contatti.get(i).getCoordinate());
+            
             if (d < Double.parseDouble(txtRaggio.getText())) {
                 
                 try {

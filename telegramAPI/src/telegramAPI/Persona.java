@@ -83,6 +83,10 @@ public class Persona {
     public void setLon(Double lon) {
         this.Coordinate.setLat(lon);
     }
+    
+    public Luogo getCoordinate(){
+        return this.Coordinate;
+    }
 
     @Override
     public String toString() {

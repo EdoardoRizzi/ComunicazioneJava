@@ -16,6 +16,15 @@ public class Luogo {
         this.lat = 0.0;
         this.lon = 0.0;
     }
+    
+    public double CalcolaDistanza(Luogo l){
+        double distanza = 0.0;
+        
+        distanza = Math.acos(Math.cos(Math.toRadians(90-this.lat))*Math.cos(Math.toRadians(90-l.lat))+
+                   Math.sin(Math.toRadians(90-this.lat))*Math.sin(Math.toRadians(90-l.lat))*Math.cos(Math.toRadians(this.lon-l.lon)))*6371*1000;
+        
+        return distanza;
+    }
 
     public Luogo(double lat, double lon) {
         this.lat = lat;
