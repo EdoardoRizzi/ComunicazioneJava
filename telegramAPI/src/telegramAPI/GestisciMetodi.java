@@ -43,7 +43,7 @@ public class GestisciMetodi {
     private GestisciFile gf;
 
     public GestisciMetodi() {
-        urlBase = "https://api.telegram.org/bot5232168151:AAFh9DG1YcHKKmvHE9_kigEyjdoy7tKZwq4/";
+        urlBase = "https://api.telegram.org/botMETTILACHIAVE/";
         VetPersone = new ArrayList<Persona>();
         gf = new GestisciFile();
     }
