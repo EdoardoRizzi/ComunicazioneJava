@@ -53,7 +53,7 @@ public class Elabora extends Thread {
             }
 
             try {
-                Thread.sleep(100000);
+                Thread.sleep(10000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Elabora.class.getName()).log(Level.SEVERE, null, ex);
             }

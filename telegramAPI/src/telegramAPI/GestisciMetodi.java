@@ -43,7 +43,7 @@ public class GestisciMetodi {
     private GestisciFile gf;
 
     public GestisciMetodi() {
-        urlBase = "https://api.telegram.org/botMETTILACHIAVE/";
+        urlBase = "https://api.telegram.org/bot5232168151:AAFh9DG1YcHKKmvHE9_kigEyjdoy7tKZwq4/";
         VetPersone = new ArrayList<Persona>();
         gf = new GestisciFile();
     }
@@ -112,7 +112,7 @@ public class GestisciMetodi {
             String Indirizzo = messaggio.getString("text");
 
             //tolgo "/citta " per avere l'inidirizzo 'pulito' (7 perché conto anche uno spazio)
-            Indirizzo.substring(7);
+            Indirizzo = Indirizzo.substring(7);
             //trovo le coordinate relativo all'inidirizzo precendente
             Luogo Coordinate = myGetLocation(Indirizzo);
             //ricavo gli altri dati necessari

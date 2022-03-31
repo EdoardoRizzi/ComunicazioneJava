@@ -120,6 +120,7 @@ public class FinestraAmministratore extends javax.swing.JFrame {
          
         try {
             Coordinate = gm.myGetLocation(txtCitta.getText());
+            System.out.println(Coordinate.toString());
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(FinestraAmministratore.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {

@@ -21,7 +21,7 @@ public class Luogo {
         double distanza = 0.0;
         
         distanza = Math.acos(Math.cos(Math.toRadians(90-this.lat))*Math.cos(Math.toRadians(90-l.lat))+
-                   Math.sin(Math.toRadians(90-this.lat))*Math.sin(Math.toRadians(90-l.lat))*Math.cos(Math.toRadians(this.lon-l.lon)))*6371*1000;
+                   Math.sin(Math.toRadians(90-this.lat))*Math.sin(Math.toRadians(90-l.lat))*Math.cos(Math.toRadians(this.lon-l.lon)))*6371;
         
         return distanza;
     }
@@ -46,7 +46,11 @@ public class Luogo {
     public double getLon() {
         return lon;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        String s = "";
+        s = "Latitudine: " + Double.toString(lat) + "Longitudine: " + Double.toString(lon);
+        return s;
+    }
 }
